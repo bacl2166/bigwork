@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#175b45"><title>CareerLens · 本地求职训练工作台</title><link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="#overview"><span class="brand-symbol">C<span>↗</span></span><span>CareerLens<small>每一次练习，都离目标更近</small></span></a>
+  <div class="nav-label">求职训练工作台</div>
+  <nav aria-label="主导航">
+    <a href="#overview" data-route="overview"><span>◈</span>工作台</a>
+    <a href="#materials" data-route="materials"><span>▤</span>求职材料</a>
+    <a href="#analysis" data-route="analysis"><span>◎</span>诊断与匹配</a>
+    <a href="#interview" data-route="interview"><span>◌</span>模拟面试</a>
+    <a href="#history" data-route="history"><span>↺</span>训练档案</a>
+  </nav>
+  <div class="sidebar-bottom"><div class="privacy-icon">⌂</div><strong>你的经历，留在你的设备</strong><p>材料与训练记录本地保存<br>运行过程无需连接云端</p><div id="side-mode" class="mode-tag">正在检查运行状态</div></div>
+</aside>
+<div class="workspace">
+  <header class="topbar"><div><span class="breadcrumb">我的成长空间</span><span class="separator">/</span><strong id="route-label">工作台</strong></div><button id="refresh-health" class="health-chip" title="点击刷新模型状态"><span class="status-dot"></span><span id="health-label">检查模型中</span></button></header>
+  <main id="app" tabindex="-1" aria-live="polite"></main>
+  <footer>CareerLens <span>·</span> 本地智能求职训练 <span>·</span> 以真实经历为起点</footer>
+</div>
+<div id="toast" role="status" hidden></div>
+<div id="loading" hidden role="status"><span class="spinner"></span><span id="loading-message">正在处理…</span><small>本地模型可能需要较长时间，请保持页面打开。</small></div>
+<noscript>请启用 JavaScript 以使用工作台。</noscript>
+</body></html>

@@ -1,0 +1,9 @@
+.venv
+.git
+data
+docs
+tests
+wheelhouse
+__pycache__
+.pytest_cache
+.env

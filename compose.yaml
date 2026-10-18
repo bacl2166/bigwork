@@ -1,0 +1,13 @@
+# Linux only: host networking allows the app to reach host-local Ollama.
+services:
+  careerlens:
+    build: .
+    network_mode: host
+    environment:
+      CAREERLENS_MODE: ${CAREERLENS_MODE:-ollama}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
+      OLLAMA_NUM_CTX: ${OLLAMA_NUM_CTX:-4096}
+      OLLAMA_TIMEOUT: ${OLLAMA_TIMEOUT:-180}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
