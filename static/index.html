@@ -1,25 +1,36 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#175b45"><title>CareerLens · 本地求职训练工作台</title><link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#315c9c"><title>CareerLens 求职工作台</title><link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script></head>
 <body>
-<aside class="sidebar">
-  <a class="brand" href="#overview"><span class="brand-symbol">C<span>↗</span></span><span>CareerLens<small>每一次练习，都离目标更近</small></span></a>
-  <div class="nav-label">求职训练工作台</div>
-  <nav aria-label="主导航">
-    <a href="#overview" data-route="overview"><span>◈</span>工作台</a>
-    <a href="#materials" data-route="materials"><span>▤</span>求职材料</a>
-    <a href="#analysis" data-route="analysis"><span>◎</span>诊断与匹配</a>
-    <a href="#interview" data-route="interview"><span>◌</span>模拟面试</a>
-    <a href="#history" data-route="history"><span>↺</span>训练档案</a>
-  </nav>
-  <div class="sidebar-bottom"><div class="privacy-icon">⌂</div><strong>你的经历，留在你的设备</strong><p>材料与训练记录本地保存<br>运行过程无需连接云端</p><div id="side-mode" class="mode-tag">正在检查运行状态</div></div>
-</aside>
+<a class="skip-link" href="#app">跳转到主要内容</a>
+<svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="icon-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></symbol>
+  <symbol id="icon-file" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8zM14 3v5h5M8 12h8M8 16h6"/></symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24"><path d="M9 5H5v15h14V5h-4M9 3h6v4H9zM8 14l3 3 5-6"/></symbol>
+  <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M20 15a3 3 0 0 1-3 3H9l-5 3V6a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3zM8 8h8M8 12h5"/></symbol>
+  <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></symbol>
+  <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+</svg>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#overview" aria-label="CareerLens 首页"><span class="brand-symbol" aria-hidden="true"><svg class="icon"><use href="#icon-file"/></svg></span><span>CareerLens<small>求职材料与面试</small></span></a>
+    <nav aria-label="主导航">
+      <a href="#overview" data-route="overview"><svg class="icon" aria-hidden="true"><use href="#icon-grid"/></svg>工作台</a>
+      <a href="#materials" data-route="materials"><svg class="icon" aria-hidden="true"><use href="#icon-file"/></svg>求职材料</a>
+      <a href="#analysis" data-route="analysis"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>材料诊断</a>
+      <a href="#interview" data-route="interview"><svg class="icon" aria-hidden="true"><use href="#icon-chat"/></svg>模拟面试</a>
+      <a href="#history" data-route="history"><svg class="icon" aria-hidden="true"><use href="#icon-clock"/></svg>训练档案</a>
+    </nav>
+    <button id="refresh-health" class="health-chip" title="点击刷新模型状态"><span class="status-dot"></span><span id="health-label">检查模型中</span></button>
+  </div>
+</header>
 <div class="workspace">
-  <header class="topbar"><div><span class="breadcrumb">我的成长空间</span><span class="separator">/</span><strong id="route-label">工作台</strong></div><button id="refresh-health" class="health-chip" title="点击刷新模型状态"><span class="status-dot"></span><span id="health-label">检查模型中</span></button></header>
+  <div class="topbar"><span class="breadcrumb">求职工作空间</span><span class="separator">/</span><span id="route-label">工作台</span></div>
   <main id="app" tabindex="-1" aria-live="polite"></main>
-  <footer>CareerLens <span>·</span> 本地智能求职训练 <span>·</span> 以真实经历为起点</footer>
+  <footer><span><svg class="icon" aria-hidden="true"><use href="#icon-lock"/></svg>材料与训练记录保存在部署服务器</span><span id="side-mode">正在检查运行状态</span></footer>
 </div>
 <div id="toast" role="status" hidden></div>
-<div id="loading" hidden role="status"><span class="spinner"></span><span id="loading-message">正在处理…</span><small>本地模型可能需要较长时间，请保持页面打开。</small></div>
+<div id="loading" hidden role="status"><span class="spinner"></span><span id="loading-message">正在处理…</span><small>正在等待本地模型，请保持页面打开。</small></div>
 <noscript>请启用 JavaScript 以使用工作台。</noscript>
 </body></html>
