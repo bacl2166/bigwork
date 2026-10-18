@@ -21,8 +21,11 @@ def create_app(settings=None):
     @app.middleware('http')
     async def local_browser_guard(request: Request, call_next):
         origin = request.headers.get('origin')
-        if request.method not in ('GET', 'HEAD', 'OPTIONS') and origin and origin != str(request.base_url).rstrip('/'):
-            return JSONResponse({'detail': '仅允许同源页面提交操作'}, status_code=403)
+        allowed_origins = {str(request.base_url).rstrip('/')}
+        if settings.public_origin:
+            allowed_origins.add(settings.public_origin)
+        if request.method not in ('GET', 'HEAD', 'OPTIONS') and origin and origin not in allowed_origins:
+            return JSONResponse({'detail': '仅允许同源页面提交操作；通过反向代理访问时请核对 CAREERLENS_PUBLIC_ORIGIN 配置'}, status_code=403)
         response = await call_next(request)
         response.headers['X-Content-Type-Options'] = 'nosniff'
         response.headers['X-Frame-Options'] = 'DENY'

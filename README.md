@@ -74,10 +74,31 @@ bash scripts/start.sh --demo
 | CAREERLENS_DATA_DIR | ./data | SQLite 数据存放目录 |
 | CAREERLENS_HOST | 127.0.0.1 | 默认仅本机访问 |
 | CAREERLENS_PORT | 8000 | Web 端口 |
+| CAREERLENS_PUBLIC_ORIGIN | 空 | 反向代理的外部来源，例如 https://实际域名:8443；仅允许一个精确地址 |
 
 `start.sh` 加载本地 `.env`，它是受信任的 Shell 配置文件，不要使用来历不明的 `.env`。直接运行 uvicorn 不会自动加载 `.env`，请先导出环境变量。
 
 首版定位为本机单用户应用。不要直接暴露到公网；没有多用户认证。向局域网部署需要另行增加鉴权、TLS 及用户隔离。数据库为明文；包含个人信息的设备应使用系统磁盘加密。关闭应用后备份整个 `data` 目录；运行时不要只拷贝 `.sqlite3` 而遗漏 WAL。删除项目会级联删除关联分析和面试，应用不提供撤销。
+
+### AutoDL 自定义服务访问
+
+AutoDL 的自定义服务通常映射容器 6006/6008 端口，访问网址需从实例控制台复制，不能从容器名称推导。仅绑定 127.0.0.1:8000 的默认部署应使用 SSH 隧道。通过平台自定义网址访问时，应用需绑定 0.0.0.0 和平台映射端口；Ollama 仍保持 127.0.0.1:11434。
+
+HTTPS 平台代理可能将内部请求转换成 HTTP，导致默认同源检查拒绝正常 POST。将 `CAREERLENS_PUBLIC_ORIGIN` 配置为平台提供的精确来源，包含协议、域名和非默认端口，不含路径。此设置不关闭同源检查、不信任任意转发请求头，也不提供登录认证。自定义服务演示只使用虚构资料；包含真实求职材料时使用 SSH 隧道或受认证的访问入口。
+
+已有 `.env` 可以在终端先加载，再通过环境变量配置；这不会改写模型或项目数据：
+
+```bash
+cd /root/autodl-tmp/CareerLens
+set -a
+source .env
+set +a
+read -r -p '粘贴 AutoDL 6006 自定义服务完整网址: ' CAREERLENS_PUBLIC_ORIGIN
+export CAREERLENS_PUBLIC_ORIGIN
+.venv/bin/python -m uvicorn careerlens.app:create_app --factory --host 0.0.0.0 --port 6006
+```
+
+保持终端打开，或在 tmux 会话内执行这组命令。使用该平台网址打开首页、保存示例项目以验证读写均可用。配置校验会拒绝通配符、带账号密码或含路径的来源地址。
 
 ## 离线安装与容器
 

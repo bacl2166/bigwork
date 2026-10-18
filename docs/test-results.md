@@ -12,6 +12,13 @@
 
 核对日期：2026-10-17。
 
+## AutoDL 反向代理访问适配（2026-10-19）
+
+- 新增可选的 `CAREERLENS_PUBLIC_ORIGIN` 精确来源配置，允许配置的 HTTPS 页面提交请求，不信任伪造的转发请求头。
+- 完整后端测试：`python -m pytest -q --tb=short`，33 passed，1 warning，耗时 9.53 秒。
+- 新增测试覆盖允许的代理来源、错误端口、恶意来源、空来源标记和非法配置；原有测试全部保留。
+- 尚未连接用户的远程实例验证公网入口，需在服务器更新并启动后验收。
+
 ## 已执行结果
 
 - 完整自动化测试：`python -m pytest -q --tb=short --junitxml=test-results/pytest.xml`，24 passed，1 warning，耗时 11.44 秒。

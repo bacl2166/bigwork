@@ -36,6 +36,23 @@ def test_external_browser_writes_blocked_but_same_origin_allowed(client):
     assert client.post('/api/projects', json=body, headers={'Origin': 'http://testserver'}).status_code == 201
 
 
+def test_configured_public_origin_accepts_https_proxy_but_blocks_others(tmp_path, monkeypatch):
+    monkeypatch.setenv('CAREERLENS_PUBLIC_ORIGIN', 'https://career.example.com:8443/')
+    body = {'name': '代理访问', 'resume': 'Python 项目', 'job': '要求 Python'}
+    with TestClient(create_app(Settings(data_dir=tmp_path, mode='demo'))) as c:
+        assert c.post('/api/projects', json=body, headers={'Origin': 'https://career.example.com:8443'}).status_code == 201
+        assert c.post('/api/projects', json=body, headers={'Origin': 'https://evil.example', 'X-Forwarded-Host': 'evil.example'}).status_code == 403
+        assert c.post('/api/projects', json=body, headers={'Origin': 'https://career.example.com:8444'}).status_code == 403
+        assert c.post('/api/projects', json=body, headers={'Origin': 'null'}).status_code == 403
+
+
+@pytest.mark.parametrize('origin', ['*', 'https://*.example.com', 'file:///tmp', 'https://user:pass@example.com', 'https://example.com/path', 'https://example.com?x=1', 'https://example.com#x', 'https://example.com:invalid'])
+def test_invalid_public_origin_configuration_rejected(monkeypatch, origin):
+    monkeypatch.setenv('CAREERLENS_PUBLIC_ORIGIN', origin)
+    with pytest.raises(ValueError):
+        Settings()
+
+
 def test_negative_evidence_and_invalid_job_quote_do_not_inflate_score(client):
     p = client.post('/api/projects', json={'name': 'x', 'resume': '没有 Docker 使用经验。技能：Python。', 'job': '要求 Docker 和 Python'}).json()
     client.app.state.service.model.generate = lambda *args: AnalysisDraft.model_validate({
